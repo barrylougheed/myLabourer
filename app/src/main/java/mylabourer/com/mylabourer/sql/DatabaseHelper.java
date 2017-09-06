@@ -25,8 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
-    private String CREATE_USER_TABLE  = "CREATE TABLE" + TABLE_USER + "("
-            + COLUMN_USER_ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
+    private String CREATE_USER_TABLE  = "CREATE TABLE " + TABLE_USER + "("
+            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_USER_NAME + " TEXT,"
             + COLUMN_USER_EMAIL + " TEXT,"
             + COLUMN_USER_PASSWORD + " TEXT"
@@ -63,14 +63,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkUser (String email){
+    //  THIS METHOD CHECKS IN THE DATABASE FOR A USER EMAIL AND PASSWORD
+
+    public boolean checkUser (String email, String password){
         String[] columns = {
                 COLUMN_USER_ID
         };
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String selection = COLUMN_USER_EMAIL + " = ? ";
-        String[] selectionArgs = { email };
+        String selection = COLUMN_USER_EMAIL + " = ? " + " AND " + COLUMN_USER_PASSWORD + " =?";
+        String[] selectionArgs = { email, password };
 
         Cursor cursor = db.query(TABLE_USER,
                 columns,

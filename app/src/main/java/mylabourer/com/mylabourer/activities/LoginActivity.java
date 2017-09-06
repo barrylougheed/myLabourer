@@ -1,6 +1,7 @@
 package mylabourer.com.mylabourer.activities;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -90,17 +91,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void verifyFromSQLite() {
        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_name)))
-       
+       {
+            return;
+       }
+       if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email) )) {
+            return;
+       }
+
+       if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_email))) {
+            return;
+       }
+
+       if (databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
+               , (textInputEditTextPassword.getText().toString().trim()))) {
+
+           Intent accountsIntent = new Intent(activity, UsersActivity.class);
+           accountsIntent.putExtra("EMAIL" , textInputEditTextEmail.getText().toString().trim() );
+           emptyInputEditText();
+           startActivity(accountsIntent);
+
+
+       }
+        else {
+
+           Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password),  Snackbar.LENGTH_LONG).show();
+       }
+
+
+       }
 
 
 
-        // if (databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
-          //     , textInputEditTextPassword.getText().toString().trim())) {
-          // Intent accountIntent = new Intent(activity, UsersActivity.class);
-
-        }
+    private void emptyInputEditText(){
+    textInputEditTextEmail.setText(null);
+    textInputEditTextPassword.setText(null);
 
 
     }
 
-}
+
+
+
+
+    }
+
+
+
+
+
+
